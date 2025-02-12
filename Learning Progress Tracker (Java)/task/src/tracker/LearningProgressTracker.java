@@ -26,7 +26,7 @@ public class LearningProgressTracker {
                     System.out.println("Enter 'exit' to exit the program");
 
                     break;
-                default :
+                default:
 
                     System.out.println("Unknown command!");
             }
