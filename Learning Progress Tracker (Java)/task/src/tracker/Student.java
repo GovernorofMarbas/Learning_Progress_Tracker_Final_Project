@@ -6,7 +6,7 @@ public class Student extends User {
     }
 
     @Override
-    public String getRole() {
+    public String  getRole() {
         return "Student";
     }
 

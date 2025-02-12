@@ -31,7 +31,7 @@ public class StudentManager {
         String lastName = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length - 1));
 
 
-        if (!isValidName(firstName)) {
+        if (!isValidName(firstName) ) {
             System.out.println("Incorrect first name.");
             return false;
         }
