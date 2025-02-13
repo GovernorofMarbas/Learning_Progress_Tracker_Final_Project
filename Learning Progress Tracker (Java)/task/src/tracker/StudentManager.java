@@ -1,6 +1,7 @@
 package tracker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,9 +27,10 @@ public class StudentManager {
             return false;
         }
 
-        String email = parts[parts.length - 1];
-        String firstName = parts[0];
+        String email = parts[parts.length - 1].trim();
+        String firstName = parts[0].trim();
         String lastName = String.join(" ", java.util.Arrays.copyOfRange(parts, 1, parts.length - 1));
+        lastName = lastName.trim();
 
 
         if (!isValidName(firstName)) {
@@ -46,10 +48,6 @@ public class StudentManager {
             return false;
         }
 
-//        if (!validateUserInput(firstName, lastName, email)) {
-//            return false;
-//        }
-
         students.add(new Student(firstName, lastName, email));
         return true;
     }
@@ -59,23 +57,6 @@ public class StudentManager {
     }
 
     public List<Student> getStudents() {
-        return students;
+        return Collections.unmodifiableList(students);
     }
-
-
-//    public static boolean validateUserInput(String firstName, String lastName, String email) {
-//        if (!isValidName(firstName)) {
-//            System.out.println("Incorrect first name.");
-//            return false;
-//        }
-//        if (!isValidName(lastName)) {
-//            System.out.println("Incorrect last name.");
-//            return false;
-//        }
-//        if (!isValidEmail(email)) {
-//            System.out.println("Incorrect email.");
-//            return false;
-//        }
-//        return true;
-//    }
 }

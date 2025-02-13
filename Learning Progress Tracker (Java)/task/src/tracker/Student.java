@@ -14,9 +14,9 @@ public class Student extends User {
     @Override
     public String toString() {
         return getRole() + "{" +
-                "email='" + email + '\'' +
-                ", lastname='" + lastName + '\'' +
-                ", firstname='" + firstName + '\'' +
+                "email='" + getEmail() + '\'' +
+                ", lastname='" + getLastName() + '\'' +
+                ", firstname='" + getFirstName() + '\'' +
                 '}';
     }
 }

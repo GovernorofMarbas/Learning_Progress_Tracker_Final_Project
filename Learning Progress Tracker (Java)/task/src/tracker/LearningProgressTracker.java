@@ -31,32 +31,27 @@ public class LearningProgressTracker {
                     System.out.println("Unknown command!");
             }
         }
-
-//        while (true) {
-//            String input = scanner.nextLine().trim();
-//            if (input.trim().isEmpty()) {
-//                System.out.println("No input");
-//            } else if (input.equalsIgnoreCase("exit")) {
-//                System.out.println("Bye!");
-//                break;
-//            } else {
-//                System.out.println("Unknown command!");
-//            }
-//        }
     }
 
     private void addStudents() {
         System.out.println("Enter student credentials or 'back' to return:");
         while (true) {
-            String input = scanner.nextLine().trim();
-            if (input.equalsIgnoreCase("back")) {
-                System.out.printf("Total %d students have been added.%n", studentManager.getStudentCount());
-//                System.out.println("Enter 'exit' to exit the program");
-                return;
-            }
-
-            if (studentManager.addStudent(input)) {
-                System.out.println("The student has been added.");
+            try {
+                String input = scanner.nextLine().trim();
+                if (input.isEmpty()) {
+                    System.out.println("No input");
+                    continue;
+                }
+                if (input.equalsIgnoreCase("back")) {
+                    System.out.printf("Total %d students have been added.%n", studentManager.getStudentCount());
+                    System.out.println("Enter 'exit' to exit the program");
+                    return;
+                }
+                if (studentManager.addStudent(input)) {
+                    System.out.println("The student has been added.");
+                }
+            }catch (Exception e){
+                System.out.println("An error occurred while reading input");
             }
         }
     }
