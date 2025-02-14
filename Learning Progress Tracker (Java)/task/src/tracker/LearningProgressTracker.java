@@ -53,15 +53,11 @@ public class LearningProgressTracker {
             try {
                 String input = scanner.nextLine().trim();
                 if (input.isEmpty()) {
-                    System.out.println("No input");
+                    System.out.println("Incorrect credentials.");
                     continue;
                 }
-//                if (input.equalsIgnoreCase("exit")) {
-//                    return;
-//                }
                 if (input.equalsIgnoreCase("back")) {
                     System.out.printf("Total %d students have been added.%n", studentManager.getStudentCount());
-                    System.out.println("Enter 'exit' to exit the program");
                     return;
                 }
                 if (studentManager.addStudent(input)) {
@@ -75,8 +71,8 @@ public class LearningProgressTracker {
 
     private void addPoints() {
         System.out.println("Enter an id and points or 'back' to return:");
+        System.out.println("studentId pointsForJava pointsForDSA pointsForDatabases pointsForSpring");
         while (true) {
-            System.out.println("studentId pointsForJava pointsForDSA pointsForDatabases pointsForSpring");
             String input = scanner.nextLine().trim();
             String[] parts = input.split("\\s+");
 
@@ -89,8 +85,18 @@ public class LearningProgressTracker {
                 System.out.println("Incorrect points format.");
                 continue;
             }
+
+            String studentIdToken = parts[0];
+            int studentId;
             try {
-                int studentId = Integer.parseInt(parts[0]);
+                studentId = Integer.parseInt(studentIdToken);
+                ;
+            } catch (NumberFormatException e) {
+                System.out.printf("No student is found for id=%s.%n", studentIdToken);
+                continue;
+            }
+
+            try {
                 int javaPoints = Integer.parseInt(parts[1]);
                 int dsaPoints = Integer.parseInt(parts[2]);
                 int dbPoints = Integer.parseInt(parts[3]);
@@ -99,35 +105,51 @@ public class LearningProgressTracker {
                     throw new NumberFormatException("Incorrect points format.");
                 }
 
-//                for (Student student : studentManager.getStudents()) {
-//                    if (student.getStudentId() == 0) {
-//                        System.out.printf("No student is found for id=%s.%n", studentId);
-//                        return;
-//                    }
-//                }
+                Student student = studentManager.findStudentById(studentId);
+                if (student == null) {
+                    System.out.printf("No student is found for id=%d.%n", studentId);
+                } else {
+                    student.addPoints(javaPoints, dsaPoints, dbPoints, springPoints);
+                    System.out.println("Points updated.");
+//                    System.out.printf("%d points: Java=%d; DSA=%d; Databases=%d; Spring=%d%n",
+//                            student.getStudentId(),
+//                            student.getJavaPoints(),
+//                            student.getDsaPoints(),
+//                            student.getDbPoints(),
+//                            student.getSpringPoints());
 
+                }
             } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Incorrect points format.");
             }
         }
     }
 
     private void find() {
         System.out.println("Enter an id or 'back' to return:");
-        String input = scanner.nextLine().trim();
-
-        if (input.equalsIgnoreCase("back")) {
-            System.out.println("Enter 'exit' to exit the program");
-            return;
-        }
         while (true) {
-            System.out.println("id points: Java=%d; DSA=%d; Databases=%d; Spring=%d");
-            for (Student student : studentManager.getStudents()) {
-                if (student.getStudentId() == 0) {
-                    System.out.printf("No student is found for id=%s.%n", student.getStudentId());
-                    break;
+            String input = scanner.nextLine().trim();
+            if (input.equalsIgnoreCase("back")) {
+                System.out.println("Enter 'exit' to exit the program");
+                return;
+            }
+            try {
+                int studentId = Integer.parseInt(input);
+                Student student = studentManager.findStudentById(studentId);
+                if (student == null) {
+                    System.out.printf("No student is found for id=%d.%n", studentId);
+                } else {
+                    System.out.printf("%d points: Java=%d; DSA=%d; Databases=%d; Spring=%d%n",
+                            student.getStudentId(),
+                            student.getJavaPoints(),
+                            student.getDsaPoints(),
+                            student.getDbPoints(),
+                            student.getSpringPoints());
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Incorrect id format." + e.getMessage());
             }
         }
     }
 }
+

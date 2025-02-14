@@ -65,6 +65,16 @@ public class StudentManager {
 //
 //    }
 
+    public Student findStudentById(int id) {
+        for (Student student : students) {
+            if (student.getStudentId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+
     public int getStudentCount() {
         return students.size();
     }
