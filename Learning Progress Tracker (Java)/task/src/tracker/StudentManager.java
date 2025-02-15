@@ -61,10 +61,6 @@ public class StudentManager {
         return true;
     }
 
-//    public static Student addPoints() {
-//
-//    }
-
     public Student findStudentById(int id) {
         for (Student student : students) {
             if (student.getStudentId() == id) {
@@ -73,7 +69,6 @@ public class StudentManager {
         }
         return null;
     }
-
 
     public int getStudentCount() {
         return students.size();

@@ -48,7 +48,6 @@ public class Student extends User {
         return "Student";
     }
 
-
     @Override
     public String toString() {
         return String.format(getRole() + "{id=%d, name=%s %s, email=%s, java=%d, dsa=%d, db=%d, spring=%d}",

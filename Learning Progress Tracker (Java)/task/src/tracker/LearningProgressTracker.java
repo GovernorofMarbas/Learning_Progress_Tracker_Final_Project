@@ -111,13 +111,6 @@ public class LearningProgressTracker {
                 } else {
                     student.addPoints(javaPoints, dsaPoints, dbPoints, springPoints);
                     System.out.println("Points updated.");
-//                    System.out.printf("%d points: Java=%d; DSA=%d; Databases=%d; Spring=%d%n",
-//                            student.getStudentId(),
-//                            student.getJavaPoints(),
-//                            student.getDsaPoints(),
-//                            student.getDbPoints(),
-//                            student.getSpringPoints());
-
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Incorrect points format.");
