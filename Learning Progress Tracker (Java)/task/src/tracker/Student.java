@@ -6,25 +6,25 @@ public class Student extends User {
     private int dsaPoints;
     private int dbPoints;
     private int springPoints;
+    private int javaSubmissions = 0;
+    private int dsaSubmissions = 0;
+    private int dbSubmissions = 0;
+    private int springSubmissions = 0;
 
-    public Student(int studentId, String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
-        this.studentId = studentId;
-        this.javaPoints = 0;
-        this.dsaPoints = 0;
-        this.dbPoints = 0;
-        this.springPoints = 0;
+    public int getJavaSubmissions() {
+        return javaSubmissions;
     }
 
-    public void addPoints(int java, int dsa, int db, int spring) {
-        this.javaPoints += java;
-        this.dsaPoints += dsa;
-        this.dbPoints += db;
-        this.springPoints += spring;
+    public int getDsaSubmissions() {
+        return dsaSubmissions;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getDbSubmissions() {
+        return dbSubmissions;
+    }
+
+    public int getSpringSubmissions() {
+        return springSubmissions;
     }
 
     public int getJavaPoints() {
@@ -42,6 +42,45 @@ public class Student extends User {
     public int getSpringPoints() {
         return springPoints;
     }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public Student(int studentId, String firstName, String lastName, String email) {
+        super(firstName, lastName, email);
+        this.studentId = studentId;
+        this.javaPoints = 0;
+        this.dsaPoints = 0;
+        this.dbPoints = 0;
+        this.springPoints = 0;
+    }
+
+    public void addPoints(int java, int dsa, int db, int spring) {
+        if (java < 0 || dsa < 0 || db < 0 || spring < 0) {
+            throw new IllegalArgumentException("Points cannot be negative");
+        }
+        this.javaPoints += java;
+        javaSubmissions++;
+        this.dsaPoints += dsa;
+        dsaSubmissions++;
+        this.dbPoints += db;
+        dbSubmissions++;
+        this.springPoints += spring;
+        springSubmissions++;
+    }
+
+    public int getPointsForCourse(Course course) {
+        switch (course) {
+            case JAVA: return javaPoints;
+            case DSA: return dsaPoints;
+            case DATABASES: return dbPoints;
+            case SPRING: return springPoints;
+            default: return 0;
+        }
+    }
+
+
 
     @Override
     public String getRole() {
