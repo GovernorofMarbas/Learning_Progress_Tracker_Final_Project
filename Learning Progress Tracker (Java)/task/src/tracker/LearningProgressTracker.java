@@ -46,7 +46,6 @@ public class LearningProgressTracker {
                     System.out.println("Type the name of a course to see details or 'back' to quit:");
                     Map<Course, CourseStats> stats = courseStats.collectStatistics();
                     boolean anyData = stats.values().stream().anyMatch(cs -> cs.getEnrolled() > 0);
-
                         if (!anyData) {
                             System.out.println("Most popular: n/a");
                             System.out.println("Least popular: n/a");

@@ -55,7 +55,6 @@ public class Student extends User {
         this.dbPoints = 0;
         this.springPoints = 0;
     }
-
     public void addPoints(int java, int dsa, int db, int spring) {
         if (java < 0 || dsa < 0 || db < 0 || spring < 0) {
             throw new IllegalArgumentException("Points cannot be negative");

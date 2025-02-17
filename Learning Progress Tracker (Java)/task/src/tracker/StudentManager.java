@@ -56,7 +56,6 @@ public class StudentManager {
         }
         emails.add(email);
 
-
         students.add(new Student(nextId, firstName, lastName, email));
         nextId++;
         return true;

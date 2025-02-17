@@ -16,7 +16,6 @@ public class CourseStats {
     public int getTotalPoints() {
         return totalPoints;
     }
-
     public void incrementEnrolled() {
         enrolled++;
     }

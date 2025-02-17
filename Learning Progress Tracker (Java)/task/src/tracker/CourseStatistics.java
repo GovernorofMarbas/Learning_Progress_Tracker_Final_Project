@@ -91,7 +91,6 @@ public class CourseStatistics {
                 hardestCourse.add(course.getName());
             }
         }
-
         categorizedCourses.put("Most Popular", mostPopular);
         categorizedCourses.put("Least Popular", leastPopular.isEmpty() ? List.of("n/a") : leastPopular);
         categorizedCourses.put("Highest Activity", highestActivity);

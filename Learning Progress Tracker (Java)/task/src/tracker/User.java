@@ -17,8 +17,8 @@ public abstract class User {
         return email;
     }
 
-    public User(String firstName, String lastName, String email) {
-        if (firstName == null || firstName.trim().isEmpty()) {
+    public User(String firstName,  String lastName, String email) {
+        if (firstName == null ||  firstName.trim().isEmpty()) {
             throw new IllegalArgumentException("First name cannot be null or empty");
         }
         if (lastName == null || lastName.trim().isEmpty()) {
@@ -31,7 +31,6 @@ public abstract class User {
         this.lastName = lastName;
         this.email = email;
     }
-
     public abstract String getRole();
 
 }

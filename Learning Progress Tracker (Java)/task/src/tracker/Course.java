@@ -5,7 +5,6 @@ public enum Course {
     DSA("DSA", 400),
     DATABASES("Databases", 480),
     SPRING("Spring", 550);
-
     private final String name;
     private final int targetPoints;
     private String description;
