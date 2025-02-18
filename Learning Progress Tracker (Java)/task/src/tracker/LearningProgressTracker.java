@@ -1,8 +1,6 @@
 package tracker;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class LearningProgressTracker {
     private final Scanner scanner = new Scanner(System.in);
@@ -46,24 +44,24 @@ public class LearningProgressTracker {
                     System.out.println("Type the name of a course to see details or 'back' to quit:");
                     Map<Course, CourseStats> stats = courseStats.collectStatistics();
                     boolean anyData = stats.values().stream().anyMatch(cs -> cs.getEnrolled() > 0);
-                        if (!anyData) {
-                            System.out.println("Most popular: n/a");
-                            System.out.println("Least popular: n/a");
-                            System.out.println("Highest activity: n/a");
-                            System.out.println("Lowest activity: n/a");
-                            System.out.println("Easiest course: n/a");
-                            System.out.println("Hardest course: n/a");
-                        } else {
-                            Map<String, List<String>> categorizedCourses = courseStats.categorizeCourses(stats);
-                            courseStats.printStatistics(
-                                    categorizedCourses.get("Most Popular"),
-                                    categorizedCourses.get("Least Popular"),
-                                    categorizedCourses.get("Highest Activity"),
-                                    categorizedCourses.get("Lowest Activity"),
-                                    categorizedCourses.get("Easiest Course"),
-                                    categorizedCourses.get("Hardest Course")
-                            );
-                        }
+                    if (!anyData) {
+                        System.out.println("Most popular: n/a");
+                        System.out.println("Least popular: n/a");
+                        System.out.println("Highest activity: n/a");
+                        System.out.println("Lowest activity: n/a");
+                        System.out.println("Easiest course: n/a");
+                        System.out.println("Hardest course: n/a");
+                    } else {
+                        Map<String, List<String>> categorizedCourses = courseStats.categorizeCourses(stats);
+                        courseStats.printStatistics(
+                                categorizedCourses.get("Most Popular"),
+                                categorizedCourses.get("Least Popular"),
+                                categorizedCourses.get("Highest Activity"),
+                                categorizedCourses.get("Lowest Activity"),
+                                categorizedCourses.get("Easiest Course"),
+                                categorizedCourses.get("Hardest Course")
+                        );
+                    }
                     while (true) {
                         String courseInput = scanner.nextLine().trim();
                         if (courseInput.equalsIgnoreCase("back")) {
@@ -76,6 +74,9 @@ public class LearningProgressTracker {
                             System.out.println("Unknown course.");
                         }
                     }
+                    break;
+                case "notify":
+                    notifyStudents();
                     break;
 
 //                case "statistics":
@@ -227,6 +228,64 @@ public class LearningProgressTracker {
         }
     }
 
+    private void notifyStudents() {
+        // Получаем список всех курсов из enum
+        List<Course> courses = Arrays.asList(Course.values());
+
+        // Множество для хранения уникальных ID студентов, которым отправили уведомления в данном запуске команды
+        Set<Integer> notifiedStudents = new HashSet<>();
+
+        // Проходим по всем студентам
+        for (Student student : studentManager.getStudents()) {
+            // Для каждого курса проверяем, выполнил ли студент его и было ли уведомление отправлено
+            for (Course course : courses) {
+                if (student.hasCompleted(course) && !student.hasBeenNotified(course)) {
+                    System.out.println("To: " + student.getEmail());
+                    System.out.println("Re: Your Learning Progress");
+                    System.out.println("Hello, " + student.getFirstName() + " " + student.getLastName()
+                            + "! You have accomplished our " + course.getName() + " course!");
+
+                    // Отмечаем, что уведомление по этому курсу отправлено
+                    student.markNotified(course);
+                    // Регистрируем студента как уведомлённого
+                    notifiedStudents.add(student.getStudentId());
+                }
+            }
+        }
+
+        System.out.println("Total " + notifiedStudents.size() + " students have been notified.");
+    }
+
+
+
+//    private void notify() {
+//        String input = scanner.nextLine().trim();
+//        if (input.equalsIgnoreCase("back")) {
+//            System.out.println("Enter 'exit' to exit the program");
+//            return;
+//        }
+//        Set<Integer> notifiedStudents = new HashSet<>();
+//
+//        for (Student student : students) {
+//            for (Course course : courses) {
+//                if (student.hasCompleted(course) && !student.hasBeenNotified(course)) {
+//                    // Вывод сообщения
+//                    System.out.println("To: " + student.getEmail());
+//                    System.out.println("Re: Your Learning Progress");
+//                    System.out.println("Hello, " + student.getFirstName() + student.getLastName() + "! You have accomplished our " + course.getName() + " course!");
+//
+//                    // Помечаем, что уведомление отправлено
+//                    student.markNotified(course);
+//
+//                    // Добавляем студента в список уведомлённых (если ещё не добавлен)
+//                    notifiedStudents.add(student.getStudentId());
+//                }
+//            }
+//        }
+//
+//        System.out.println("Total " + notifiedStudents.size() + " students have been notified.");
+//
+//    }
 
 }
 

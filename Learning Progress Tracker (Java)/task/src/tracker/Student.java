@@ -1,5 +1,8 @@
 package tracker;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Student extends User {
     private final int studentId;
     private int javaPoints;
@@ -10,6 +13,8 @@ public class Student extends User {
     private int dsaSubmissions = 0;
     private int dbSubmissions = 0;
     private int springSubmissions = 0;
+
+    private final Set<String> notifiedCourses = new HashSet<>();
 
     public int getJavaSubmissions() {
         return javaSubmissions;
@@ -77,6 +82,18 @@ public class Student extends User {
             case SPRING: return springPoints;
             default: return 0;
         }
+    }
+
+    public boolean hasCompleted(Course course) {
+        return getPointsForCourse(course) >= course.getTargetPoints();
+    }
+
+    public boolean hasBeenNotified(Course course) {
+        return notifiedCourses.contains(course.getName());
+    }
+
+    public void markNotified(Course course) {
+        notifiedCourses.add(course.getName());
     }
 
 
