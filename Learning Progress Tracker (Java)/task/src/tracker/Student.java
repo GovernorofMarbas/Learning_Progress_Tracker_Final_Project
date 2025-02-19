@@ -1,30 +1,35 @@
 package tracker;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Student extends User {
     private final int studentId;
     private int javaPoints;
     private int dsaPoints;
     private int dbPoints;
     private int springPoints;
+    private int javaSubmissions = 0;
+    private int dsaSubmissions = 0;
+    private int dbSubmissions = 0;
+    private int springSubmissions = 0;
 
-    public Student(int studentId, String firstName, String lastName, String email) {
-        super(firstName, lastName, email);
-        this.studentId = studentId;
-        this.javaPoints = 0;
-        this.dsaPoints = 0;
-        this.dbPoints = 0;
-        this.springPoints = 0;
+    private final Set<String> notifiedCourses = new HashSet<>();
+
+    public int getJavaSubmissions() {
+        return javaSubmissions;
     }
 
-    public void addPoints(int java, int dsa, int db, int spring) {
-        this.javaPoints += java;
-        this.dsaPoints += dsa;
-        this.dbPoints += db;
-        this.springPoints += spring;
+    public int getDsaSubmissions() {
+        return dsaSubmissions;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getDbSubmissions() {
+        return dbSubmissions;
+    }
+
+    public int getSpringSubmissions() {
+        return springSubmissions;
     }
 
     public int getJavaPoints() {
@@ -43,11 +48,56 @@ public class Student extends User {
         return springPoints;
     }
 
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public Student(int studentId, String firstName, String lastName, String email) {
+        super(firstName, lastName, email);
+        this.studentId = studentId;
+        this.javaPoints = 0;
+        this.dsaPoints = 0;
+        this.dbPoints = 0;
+        this.springPoints = 0;
+    }
+
+    public void addPoints(int java, int dsa, int db, int spring) {
+        this.javaPoints += java;
+        if (java > 0) javaSubmissions++;
+        this.dsaPoints += dsa;
+        if (dsa > 0) dsaSubmissions++;
+        this.dbPoints += db;
+        if (db > 0) dbSubmissions++;
+        this.springPoints += spring;
+        if (spring > 0) springSubmissions++;
+    }
+
+    public int getPointsForCourse(Course course) {
+        return switch (course) {
+            case JAVA -> javaPoints;
+            case DSA -> dsaPoints;
+            case DATABASES -> dbPoints;
+            case SPRING -> springPoints;
+        };
+    }
+
+    public boolean hasCompleted(Course course) {
+        return getPointsForCourse(course) >= course.getTargetPoints();
+    }
+
+    public boolean hasBeenNotified(Course course) {
+        return notifiedCourses.contains(course.getName());
+    }
+
+    public void markNotified(Course course) {
+        notifiedCourses.add(course.getName());
+    }
+
+
     @Override
     public String getRole() {
         return "Student";
     }
-
 
     @Override
     public String toString() {

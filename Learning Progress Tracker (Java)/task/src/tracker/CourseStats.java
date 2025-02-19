@@ -13,9 +13,6 @@ public class CourseStats {
         return submissions;
     }
 
-    public int getTotalPoints() {
-        return totalPoints;
-    }
     public void incrementEnrolled() {
         enrolled++;
     }

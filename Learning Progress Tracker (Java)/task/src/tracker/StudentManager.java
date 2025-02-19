@@ -2,6 +2,7 @@ package tracker;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class StudentManager {
     private final List<Student> students = new ArrayList<>();
@@ -19,7 +20,6 @@ public class StudentManager {
     private boolean isValidEmail(String email) {
         return EMAIL_PATTERN.matcher(email).matches();
     }
-
 
     public boolean addStudent(String input) {
         String[] parts = input.split("\\s+");
@@ -55,12 +55,10 @@ public class StudentManager {
         }
         emails.add(email);
 
-
         students.add(new Student(nextId, firstName, lastName, email));
         nextId++;
         return true;
     }
-
 
     public Student findStudentById(int id) {
         for (Student student : students) {
@@ -71,6 +69,11 @@ public class StudentManager {
         return null;
     }
 
+    public List<Student> getStudentsEnrolledIn(Course course) {
+        return students.stream()
+                .filter(s -> s.getPointsForCourse(course) > 0)
+                .collect(Collectors.toList());
+    }
 
     public int getStudentCount() {
         return students.size();
