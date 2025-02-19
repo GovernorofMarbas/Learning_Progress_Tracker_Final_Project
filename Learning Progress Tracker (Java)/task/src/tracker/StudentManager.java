@@ -2,7 +2,6 @@ package tracker;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class StudentManager {
     private final List<Student> students = new ArrayList<>();
@@ -56,10 +55,12 @@ public class StudentManager {
         }
         emails.add(email);
 
+
         students.add(new Student(nextId, firstName, lastName, email));
         nextId++;
         return true;
     }
+
 
     public Student findStudentById(int id) {
         for (Student student : students) {
@@ -68,12 +69,6 @@ public class StudentManager {
             }
         }
         return null;
-    }
-
-    public List<Student> getStudentsEnrolledIn(Course course) {
-        return students.stream()
-                .filter(s -> s.getPointsForCourse(course) > 0)
-                .collect(Collectors.toList());
     }
 
 
