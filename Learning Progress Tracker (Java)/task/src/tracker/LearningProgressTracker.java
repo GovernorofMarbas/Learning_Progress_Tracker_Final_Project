@@ -1,11 +1,14 @@
 package tracker;
 
 import java.util.*;
+import java.util.logging.ErrorManager;
+import java.util.logging.Logger;
 
 public class LearningProgressTracker {
     private final Scanner scanner = new Scanner(System.in);
     StudentManager studentManager = new StudentManager();
     CourseStatistics courseStats = new CourseStatistics(studentManager, scanner);
+    private Logger logger;
 
     public void run() {
         System.out.println("Learning Progress Tracker");
@@ -186,26 +189,22 @@ public class LearningProgressTracker {
 
     private void notifyStudents() {
         List<Course> courses = Arrays.asList(Course.values());
+        Set<Integer> notifiedStudents = Collections.synchronizedSet(new HashSet<>());
 
-        Set<Integer> notifiedStudents = new HashSet<>();
-
-
-        for (Student student : studentManager.getStudents()) {
-
-            for (Course course : courses) {
+        studentManager.getStudents().parallelStream().forEach(student -> {
+            courses.forEach(course -> {
                 if (student.hasCompleted(course) && !student.hasBeenNotified(course)) {
-                    System.out.println("To: " + student.getEmail());
-                    System.out.println("Re: Your Learning Progress");
-                    System.out.println("Hello, " + student.getFirstName() + " " + student.getLastName()
-                            + "! You have accomplished our " + course.getName() + " course!");
-
-
-                    student.markNotified(course);
-
-                    notifiedStudents.add(student.getStudentId());
+                    try {
+                        String emailContent = EmailTemplates.generateCourseCompletionEmail(student, course);
+                        System.out.println(emailContent);
+                        student.markNotified(course);
+                        notifiedStudents.add(student.getStudentId());
+                    } catch (Exception e) {
+                        logger.severe("Failed to notify student " + student.getStudentId() + ": " + e.getMessage());
+                    }
                 }
-            }
-        }
+            });
+        });
 
         System.out.println("Total " + notifiedStudents.size() + " students have been notified.");
     }

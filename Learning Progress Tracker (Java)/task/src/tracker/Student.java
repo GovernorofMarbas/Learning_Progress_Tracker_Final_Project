@@ -62,17 +62,14 @@ public class Student extends User {
     }
 
     public void addPoints(int java, int dsa, int db, int spring) {
-        if (java < 0 || dsa < 0 || db < 0 || spring < 0) {
-            throw new IllegalArgumentException("Points cannot be negative");
-        }
         this.javaPoints += java;
-        javaSubmissions++;
+        if (java > 0) javaSubmissions++;
         this.dsaPoints += dsa;
-        dsaSubmissions++;
+        if (dsa > 0) dsaSubmissions++;
         this.dbPoints += db;
-        dbSubmissions++;
+        if (db > 0) dbSubmissions++;
         this.springPoints += spring;
-        springSubmissions++;
+        if (spring > 0) springSubmissions++;
     }
 
     public int getPointsForCourse(Course course) {
