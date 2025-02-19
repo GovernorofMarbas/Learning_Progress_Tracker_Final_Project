@@ -1,11 +1,14 @@
 package tracker;
 
-import java.util.Scanner;
-
+import java.util.*;
+import java.util.logging.ErrorManager;
+import java.util.logging.Logger;
 
 public class LearningProgressTracker {
     private final Scanner scanner = new Scanner(System.in);
     StudentManager studentManager = new StudentManager();
+    CourseStatistics courseStats = new CourseStatistics(studentManager, scanner);
+    private Logger logger;
 
     public void run() {
         System.out.println("Learning Progress Tracker");
@@ -18,7 +21,6 @@ public class LearningProgressTracker {
                 case "exit":
                     System.out.println("Bye!");
                     return;
-//                    break;
                 case "add students":
                     addStudents();
                     break;
@@ -40,6 +42,44 @@ public class LearningProgressTracker {
                     break;
                 case "find":
                     find();
+                    break;
+                case "statistics":
+                    System.out.println("Type the name of a course to see details or 'back' to quit:");
+                    Map<Course, CourseStats> stats = courseStats.collectStatistics();
+                    boolean anyData = stats.values().stream().anyMatch(cs -> cs.getEnrolled() > 0);
+                    if (!anyData) {
+                        System.out.println("Most popular: n/a");
+                        System.out.println("Least popular: n/a");
+                        System.out.println("Highest activity: n/a");
+                        System.out.println("Lowest activity: n/a");
+                        System.out.println("Easiest course: n/a");
+                        System.out.println("Hardest course: n/a");
+                    } else {
+                        Map<String, List<String>> categorizedCourses = courseStats.categorizeCourses(stats);
+                        courseStats.printStatistics(
+                                categorizedCourses.get("Most Popular"),
+                                categorizedCourses.get("Least Popular"),
+                                categorizedCourses.get("Highest Activity"),
+                                categorizedCourses.get("Lowest Activity"),
+                                categorizedCourses.get("Easiest Course"),
+                                categorizedCourses.get("Hardest Course")
+                        );
+                    }
+                    while (true) {
+                        String courseInput = scanner.nextLine().trim();
+                        if (courseInput.equalsIgnoreCase("back")) {
+                            break;
+                        }
+                        if (courseStats.courseExists(courseInput)) {
+                            System.out.println("Showing details for course: " + courseInput);
+                            courseStats.showCourseDetails(courseInput);
+                        } else {
+                            System.out.println("Unknown course.");
+                        }
+                    }
+                    break;
+                case "notify":
+                    notifyStudents();
                     break;
                 default:
                     System.out.println("Unknown command!");
@@ -63,9 +103,12 @@ public class LearningProgressTracker {
                 if (studentManager.addStudent(input)) {
                     System.out.println("The student has been added.");
                 }
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             } catch (Exception e) {
-                System.out.println("An error occurred while reading input");
+                System.out.println("An error occurred while reading input: " + e.getMessage());
             }
+
         }
     }
 
@@ -110,13 +153,6 @@ public class LearningProgressTracker {
                 } else {
                     student.addPoints(javaPoints, dsaPoints, dbPoints, springPoints);
                     System.out.println("Points updated.");
-//                    System.out.printf("%d points: Java=%d; DSA=%d; Databases=%d; Spring=%d%n",
-//                            student.getStudentId(),
-//                            student.getJavaPoints(),
-//                            student.getDsaPoints(),
-//                            student.getDbPoints(),
-//                            student.getSpringPoints());
-
                 }
             } catch (NumberFormatException e) {
                 System.out.println("Incorrect points format.");
@@ -150,5 +186,28 @@ public class LearningProgressTracker {
             }
         }
     }
+
+    private void notifyStudents() {
+        List<Course> courses = Arrays.asList(Course.values());
+        Set<Integer> notifiedStudents = Collections.synchronizedSet(new HashSet<>());
+
+        studentManager.getStudents().parallelStream().forEach(student -> {
+            courses.forEach(course -> {
+                if (student.hasCompleted(course) && !student.hasBeenNotified(course)) {
+                    try {
+                        String emailContent = EmailTemplates.generateCourseCompletionEmail(student, course);
+                        System.out.println(emailContent);
+                        student.markNotified(course);
+                        notifiedStudents.add(student.getStudentId());
+                    } catch (Exception e) {
+                        logger.severe("Failed to notify student " + student.getStudentId() + ": " + e.getMessage());
+                    }
+                }
+            });
+        });
+
+        System.out.println("Total " + notifiedStudents.size() + " students have been notified.");
+    }
+
 }
 

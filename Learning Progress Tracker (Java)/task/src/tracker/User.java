@@ -18,20 +18,28 @@ public abstract class User {
     }
 
     public User(String firstName, String lastName, String email) {
-        if (firstName == null || firstName.trim().isEmpty()) {
-            throw new IllegalArgumentException("First name cannot be null or empty");
+        this.firstName = validateName(firstName, "First name");
+        this.lastName = validateName(lastName, "Last name");
+        this.email = validateEmail(email);
+    }
+
+    private static String validateName(String name, String fieldName) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException(fieldName + " cannot be null or empty");
         }
-        if (lastName == null || lastName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Last name cannot be null or empty");
-        }
+        return name.trim();
+    }
+
+    private static String validateEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+        String trimmedEmail = email.trim();
+        if (!trimmedEmail.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
+        return trimmedEmail;
     }
 
     public abstract String getRole();
-
 }
