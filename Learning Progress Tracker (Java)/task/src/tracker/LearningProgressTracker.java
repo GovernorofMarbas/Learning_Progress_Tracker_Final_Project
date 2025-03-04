@@ -1,7 +1,6 @@
 package tracker;
 
 import java.util.*;
-import java.util.logging.ErrorManager;
 import java.util.logging.Logger;
 
 public class LearningProgressTracker {
@@ -16,11 +15,21 @@ public class LearningProgressTracker {
             String input = scanner.nextLine().trim();
             switch (input.toLowerCase()) {
                 case "":
-                    System.out.println("No input");
+                    System.out.println("No input. Type 'help' for available commands.");
                     break;
                 case "exit":
                     System.out.println("Bye!");
                     return;
+                case "help":
+                    System.out.println("Available commands:");
+                    System.out.println("- add students: Register new students.");
+                    System.out.println("- list: Show all registered students.");
+                    System.out.println("- add points: Assign course points to students.");
+                    System.out.println("- find: Look up a student's progress.");
+                    System.out.println("- statistics: View course statistics.");
+                    System.out.println("- notify: Send completion notifications.");
+                    System.out.println("- exit: Close the program.");
+                    break;
                 case "add students":
                     addStudents();
                     break;
@@ -82,7 +91,7 @@ public class LearningProgressTracker {
                     notifyStudents();
                     break;
                 default:
-                    System.out.println("Unknown command!");
+                    System.out.println("Unknown command! Type 'help' for a list of available commands.");
             }
         }
     }
