@@ -218,5 +218,9 @@ public class LearningProgressTracker {
         System.out.println("Total " + notifiedStudents.size() + " students have been notified.");
     }
 
+    public StudentManager getStudentManager() {
+        return studentManager;
+    }
+
 }
 

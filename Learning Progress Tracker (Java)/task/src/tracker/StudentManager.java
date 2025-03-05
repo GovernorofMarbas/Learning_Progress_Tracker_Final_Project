@@ -8,6 +8,10 @@ public class StudentManager {
     private final List<Student> students = new ArrayList<>();
     private final Set<String> emails = new HashSet<>();
 
+    public List<Student> getAllStudents() {
+        return students;
+    }
+
     private final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z0-9]+$");
     private final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z]+([-' ][A-Za-z]+)*$");
 
@@ -82,4 +86,7 @@ public class StudentManager {
     public List<Student> getStudents() {
         return Collections.unmodifiableList(students);
     }
+
+
+
 }
